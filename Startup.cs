@@ -14,7 +14,7 @@ namespace CovidWebService
     public class Startup
     {
         /// <summary>
-        /// ???
+        /// Accept data from files
         /// </summary>
         /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
@@ -22,7 +22,6 @@ namespace CovidWebService
             Configuration = configuration;
         }
 
-        // ??
         public IConfiguration Configuration { get; }
 
         /// <summary>
@@ -77,7 +76,8 @@ namespace CovidWebService
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+             
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
