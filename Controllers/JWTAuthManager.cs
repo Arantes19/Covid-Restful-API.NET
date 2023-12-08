@@ -11,10 +11,6 @@ using CovidWebService.Models;
 
 namespace CovidWebService.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class JWTAuthManager : ControllerBase
-    {
         public interface IJWTAuthManager
         {
             /// <summary>
@@ -36,10 +32,10 @@ namespace CovidWebService.Controllers
             /// Simula Bases de dados com users registados!
             /// </summary>
             IDictionary<string, string> users = new Dictionary<string, string>
-        {
-            { "test1", "password1" },
-            { "test2", "password2" }
-        };
+            {
+                { "test1", "password1" },
+                { "test2", "password2" }
+            };
 
             private readonly string tokenKey;
 
@@ -54,7 +50,7 @@ namespace CovidWebService.Controllers
             /// <param name="Configuration"></param>
             public JWTAuthManager(IConfiguration Configuration)
             {
-                _config = Configuration;                            //para aceder a appsettings.json
+                _config = Configuration;   //para aceder a appsettings.json
             }
             #endregion
 
@@ -184,5 +180,4 @@ namespace CovidWebService.Controllers
 
             #endregion
         }
-    }
 }

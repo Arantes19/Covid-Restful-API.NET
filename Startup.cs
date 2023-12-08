@@ -1,17 +1,16 @@
-using CovidWebService.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using NSwag;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using CovidWebService.Models;
+using CovidWebService.Controllers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;    //versão 3.0
+using Microsoft.IdentityModel.Tokens;
 
 namespace CovidWebService
 {
@@ -68,37 +67,39 @@ namespace CovidWebService
 
 
             #region Swagger
-            services.AddSwaggerDocument(o =>
-                o.PostProcess = document =>
-                {
-                    document.Info.Title = "Core API";
-                    document.Info.Version = "v1";
-                    document.Info.Description = "Restful API for covid occurrences";
-                    document.Info.Contact = new NSwag.OpenApiContact
-                    {
-                        Name = "Francisco Arantes",
-                        Email = "23504@alunos.ipca.pt",
-                        Url = "https://www.ipca.pt"
-                    };
-                    document.Info.License = new NSwag.OpenApiLicense
-                    {
-                        Name = "Use under IPCA rights",
-                        Url = "https://www.ipca.pt/license"
-                    };
-                }
-                );
-            #endregion
-
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            //Swashbuckle 
+            //services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
             {
-                In = ParameterLocation.Header,
-                Description = "Please enter a valid token",
-                Name = "Authorization",
-                Type = SecuritySchemeType.Http, //não usa o Bearer
-                BearerFormat = "JWT",
-                Scheme = "Bearer"
-            });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1-2023",
+                    Title = "ISI API",
+                    Description = "ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://www.ipca.pt/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Lufer",
+                        Email = string.Empty,
+                        Url = new Uri("http://www.ipca.pt"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Copyright",
+                        Url = new Uri("http://www.ipca.pt/license"),
+                    }
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http, //não usa o Bearer
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -112,8 +113,11 @@ namespace CovidWebService
                         new string[]{}
                     }
                 });
+
+            });
         }
 
+        #endregion
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
@@ -131,10 +135,16 @@ namespace CovidWebService
                 app.UseHsts();
             }
 
-            app.UseOpenApi();
-            app.UseSwaggerUi3();     
-
             app.UseHttpsRedirection();
+
+            //app.UseOpenApi();
+            //app.UseSwaggerUi3();     
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.)
+            app.UseSwaggerUI();
 
             app.UseRouting();
              
