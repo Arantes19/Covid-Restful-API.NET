@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
@@ -11,7 +9,7 @@ using CovidWebService.Models;
 
 namespace CovidWebService.Controllers
 {
-        public interface IJWTAuthManager
+    public interface IJWTAuthManager
         {
             /// <summary>
             /// Várias possibilidades de autenticação
@@ -167,7 +165,7 @@ namespace CovidWebService.Controllers
                 //ou verificar na BD da classe "Users"
                 //var user = users.SingleOrDefault(x => x.Username == loginDetalhes.Username && x.Password == loginDetalhes.Password);
 
-                if (loginDetalhes.Username == "lufer" && loginDetalhes.Password == "Benfica2023")
+                if (loginDetalhes.Username == "francisco" && loginDetalhes.Password == "arantes")
                 {
                     return true;
                 }
